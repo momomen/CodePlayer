@@ -1,0 +1,237 @@
+<!doctype html>
+<html>
+<head>
+    <title>Test</title>
+
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<style type="text/css">
+
+
+		body {
+
+			font-family: helvetica, sans-serif;
+            font-size: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        #buttoncontainer {
+
+            margin: 0 auto;
+            width: 250px;
+        }
+
+        .togglebutton {
+
+            position: relative;
+            top:15px;
+            margin-right:-5px;
+            border: 1px solid grey;
+            height: 25px;
+            background-color: #EDEDED;
+
+        }
+
+        #htmlbutton {
+
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+            border-right: none;
+        }
+
+        #outputbutton {
+
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+
+        }
+
+        #cssbutton {
+
+            border-right: none;
+
+        }
+
+        #header h3{
+
+            margin-left:20px;
+            position: relative;
+            top: -4px;
+            float: left;
+
+        }
+
+        #header {
+
+            width: 100%;
+            background-color: rgb(193,193,193);
+            height: 50px;
+
+        }
+
+        #maincontainer {
+
+            margin-top: -9px;
+            width:100%;
+            float: left;
+        }
+
+
+        .highlightedbutton {
+
+            background-color: #CCCCCC;
+        }
+
+        .active {
+
+            background-color: #EBF3FF;
+        }
+
+        .highlightedactivebutton {
+
+            background-color: #f5f9ff;
+        }
+
+        textarea {
+
+            resize: none;
+            border: none;
+            border-left:1px solid grey;
+
+        }
+
+        .panel {
+
+            float: left;
+            width: 50%;
+            display: none;
+
+        }
+
+        iframe {
+
+            border : none;
+            border-left:1px solid grey;
+        }
+
+        .activepanel{
+
+            display: inline;
+
+        }
+	</style>
+
+
+</head>
+
+<body>
+
+    <div id="header">
+
+        <h3>CodePlayer</h3>
+
+        <div id="buttoncontainer">
+            <button class="togglebutton active" id="htmlbutton">HTML</button>
+            <button class="togglebutton" id="cssbutton">CSS</button>
+            <button class="togglebutton" id="jsbutton">Javascript</button>
+            <button class="togglebutton active" id="outputbutton">Ouput</button>
+        </div>
+
+    </div>
+
+    <div id="maincontainer">
+
+        <textarea class="panel activepanel" id="HTML" name="HTML"><p id="text">Hello World!</p></textarea>
+
+        <textarea class="panel" id="CSS" name="CSS">p { color: Green }</textarea>
+
+        <textarea class="panel" id="Javascript" name="Javascript">document.getElementById("text").innerHTML = "Hello Overlord!";</textarea>
+
+        <iframe class="panel activepanel" id="Output"></iframe>
+
+    </div>
+	<script type="text/javascript">
+
+        function updatedOutput() {
+
+            $("#Output").contents().find("html").html("<html><head><style type='text/css'>" + $("#CSS").val() + "</style></head><body>" + $("#HTML").val() + "</body></html>");
+
+            document.getElementById("Output").contentWindow.eval($("#Javascript").val());
+
+        }
+
+        $(".togglebutton").hover(function(){
+
+            if ($(this).hasClass("active")){
+
+                $(this).addClass("highlightedactivebutton");
+
+            } else {
+
+                $(this).addClass("highlightedbutton");
+            };
+
+        }, function(){
+
+            $(this).removeClass("highlightedbutton highlightedactivebutton");
+
+        });
+
+        $(".togglebutton").click(function(){
+
+            $(this).toggleClass("active");
+            $(this).removeClass("highlightedbutton");
+        });
+
+
+        $("#htmlbutton").click(function(){
+
+            $("#HTML").toggleClass("activepanel");
+            $(".panel").width(($(window).width() / ($(".activepanel").length)) - 16);
+
+        });
+
+        $("#cssbutton").click(function(){
+
+            $("#CSS").toggleClass("activepanel");
+            $(".panel").width(($(window).width() / ($(".activepanel").length)) - 16);
+
+        });
+
+        $("#jsbutton").click(function(){
+
+            $("#Javascript").toggleClass("activepanel");
+            $(".panel").width(($(window).width() / ($(".activepanel").length)) - 16);
+        });
+
+        $("#outputbutton").click(function(){
+
+            $("#Output").toggleClass("activepanel");
+            $(".panel").width(($(window).width() / ($(".activepanel").length)) - 16);
+        });
+
+        $(".panel").height($(window).height() - 52);
+
+        $(".panel").width(($(window).width() / ($(".activepanel").length)) - 16);
+
+        updatedOutput();
+
+        $("textarea").on("change keyup paste", function () {
+
+            updatedOutput();
+
+        });
+
+
+
+	</script>
+
+</body>
+</html>
+
